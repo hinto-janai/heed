@@ -16,7 +16,8 @@ byteorder = { version = "1.4.3", default-features = false }
 heed-traits = { version = "0.20.0", path = "../heed-traits" }
 heed-types = { version = "0.20.0", default-features = false, path = "../heed-types" }
 libc = "0.2.139"
-lmdb-master-sys = { version = "0.2.0", path = "../lmdb-master-sys" }
+# lmdb-master-sys = { version = "0.1.0", path = "../lmdb-master-sys" }
+lmdb-master-sys = { version = "0.1.0" }
 once_cell = "1.16.0"
 page_size = "0.6.0"
 serde = { version = "1.0.151", features = ["derive"], optional = true }
@@ -80,15 +81,15 @@ posix-sem = ["lmdb-master-sys/posix-sem"]
 #
 # For more information on the motivation for these features (and their effect),
 # see https://github.com/mozilla/lmdb/pull/2.
-mdb_idl_logn_8 = ["lmdb-master-sys/mdb_idl_logn_8"]
-mdb_idl_logn_9 = ["lmdb-master-sys/mdb_idl_logn_9"]
-mdb_idl_logn_10 = ["lmdb-master-sys/mdb_idl_logn_10"]
-mdb_idl_logn_11 = ["lmdb-master-sys/mdb_idl_logn_11"]
-mdb_idl_logn_12 = ["lmdb-master-sys/mdb_idl_logn_12"]
-mdb_idl_logn_13 = ["lmdb-master-sys/mdb_idl_logn_13"]
-mdb_idl_logn_14 = ["lmdb-master-sys/mdb_idl_logn_14"]
-mdb_idl_logn_15 = ["lmdb-master-sys/mdb_idl_logn_15"]
-mdb_idl_logn_16 = ["lmdb-master-sys/mdb_idl_logn_16"]
+# mdb_idl_logn_8 = ["lmdb-master-sys/mdb_idl_logn_8"]
+# mdb_idl_logn_9 = ["lmdb-master-sys/mdb_idl_logn_9"]
+# mdb_idl_logn_10 = ["lmdb-master-sys/mdb_idl_logn_10"]
+# mdb_idl_logn_11 = ["lmdb-master-sys/mdb_idl_logn_11"]
+# mdb_idl_logn_12 = ["lmdb-master-sys/mdb_idl_logn_12"]
+# mdb_idl_logn_13 = ["lmdb-master-sys/mdb_idl_logn_13"]
+# mdb_idl_logn_14 = ["lmdb-master-sys/mdb_idl_logn_14"]
+# mdb_idl_logn_15 = ["lmdb-master-sys/mdb_idl_logn_15"]
+# mdb_idl_logn_16 = ["lmdb-master-sys/mdb_idl_logn_16"]
 
 [[example]]
 name = "rmp-serde"
