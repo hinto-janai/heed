@@ -138,13 +138,13 @@ fn main() {
     }
 
     if cfg!(feature = "asan") {
-        builder.flag("-fsanitize=address");
+        builder.flag_if_supported("-fsanitize=address");
     }
 
     if cfg!(feature = "fuzzer") {
-        builder.flag("-fsanitize=fuzzer");
+        builder.flag_if_supported("-fsanitize=fuzzer");
     } else if cfg!(feature = "fuzzer-no-link") {
-        builder.flag("-fsanitize=fuzzer-no-link");
+        builder.flag_if_supported("-fsanitize=fuzzer-no-link");
     }
 
     builder.compile("liblmdb.a")
