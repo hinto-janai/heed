@@ -10,97 +10,30 @@ mod generate;
 use std::env;
 use std::path::PathBuf;
 
-#[cfg(all(
-    feature = "mdb_idl_logn_8",
-    not(any(
-        feature = "mdb_idl_logn_9",
-        feature = "mdb_idl_logn_10",
-        feature = "mdb_idl_logn_11",
-        feature = "mdb_idl_logn_12",
-        feature = "mdb_idl_logn_13",
-        feature = "mdb_idl_logn_14",
-        feature = "mdb_idl_logn_15",
-        feature = "mdb_idl_logn_16"
-    ))
-))]
-const MDB_IDL_LOGN: u8 = 8;
-#[cfg(all(
-    feature = "mdb_idl_logn_9",
-    not(any(
-        feature = "mdb_idl_logn_10",
-        feature = "mdb_idl_logn_11",
-        feature = "mdb_idl_logn_12",
-        feature = "mdb_idl_logn_13",
-        feature = "mdb_idl_logn_14",
-        feature = "mdb_idl_logn_15",
-        feature = "mdb_idl_logn_16"
-    ))
-))]
-const MDB_IDL_LOGN: u8 = 9;
-#[cfg(all(
-    feature = "mdb_idl_logn_10",
-    not(any(
-        feature = "mdb_idl_logn_11",
-        feature = "mdb_idl_logn_12",
-        feature = "mdb_idl_logn_13",
-        feature = "mdb_idl_logn_14",
-        feature = "mdb_idl_logn_15",
-        feature = "mdb_idl_logn_16"
-    ))
-))]
-const MDB_IDL_LOGN: u8 = 10;
-#[cfg(all(
-    feature = "mdb_idl_logn_11",
-    not(any(
-        feature = "mdb_idl_logn_12",
-        feature = "mdb_idl_logn_13",
-        feature = "mdb_idl_logn_14",
-        feature = "mdb_idl_logn_15",
-        feature = "mdb_idl_logn_16"
-    ))
-))]
-const MDB_IDL_LOGN: u8 = 11;
-#[cfg(all(
-    feature = "mdb_idl_logn_12",
-    not(any(
-        feature = "mdb_idl_logn_13",
-        feature = "mdb_idl_logn_14",
-        feature = "mdb_idl_logn_15",
-        feature = "mdb_idl_logn_16"
-    ))
-))]
-const MDB_IDL_LOGN: u8 = 12;
-#[cfg(all(
-    feature = "mdb_idl_logn_13",
-    not(any(
-        feature = "mdb_idl_logn_14",
-        feature = "mdb_idl_logn_15",
-        feature = "mdb_idl_logn_16"
-    ))
-))]
-const MDB_IDL_LOGN: u8 = 13;
-#[cfg(all(
-    feature = "mdb_idl_logn_14",
-    not(any(feature = "mdb_idl_logn_15", feature = "mdb_idl_logn_16"))
-))]
-const MDB_IDL_LOGN: u8 = 14;
-#[cfg(all(feature = "mdb_idl_logn_15", not(any(feature = "mdb_idl_logn_16"))))]
-const MDB_IDL_LOGN: u8 = 15;
-#[cfg(any(
-    feature = "mdb_idl_logn_16",
-    not(any(
-        feature = "mdb_idl_logn_8",
-        feature = "mdb_idl_logn_9",
-        feature = "mdb_idl_logn_10",
-        feature = "mdb_idl_logn_11",
-        feature = "mdb_idl_logn_12",
-        feature = "mdb_idl_logn_13",
-        feature = "mdb_idl_logn_14",
-        feature = "mdb_idl_logn_15",
-        feature = "mdb_idl_logn_16",
-    ))
-))]
-const MDB_IDL_LOGN: u8 = 16;
+const MDB_IDL_LOGN_DEFAULT: u8 = 16;
+const MDB_IDL_LOGN: Option<u8> = {
+    cfg_if::cfg_if! {
+        if #[cfg(feature = "mdb_idl_logn_16")] {
+            Some(16)
+        } else if #[cfg(feature = "mdb_idl_logn_15")] {
+            Some(15)
+        } else if #[cfg(feature = "mdb_idl_logn_14")] {
+            Some(14)
+        } else if #[cfg(feature = "mdb_idl_logn_13")] {
+            Some(13)
+        } else if #[cfg(feature = "mdb_idl_logn_12")] {
+            Some(12)
+        } else if #[cfg(feature = "mdb_idl_logn_11")] {
+            Some(11)
+        } else if #[cfg(feature = "mdb_idl_logn_10")] {
+            Some(10)
+        } else if #[cfg(feature = "mdb_idl_logn_9")] {
+            Some(9)
+        } else {
+            None
+        }
+    }
+};
 
 macro_rules! warn {
     ($message:expr) => {
@@ -124,8 +57,13 @@ fn main() {
 
     let mut builder = cc::Build::new();
 
+    let mdb_idl_logn = MDB_IDL_LOGN.unwrap_or_else(|| {
+        warn!("MDB_IDL_LOGN feature not enabled, defaulting to {MDB_IDL_LOGN_DEFAULT}");
+        MDB_IDL_LOGN_DEFAULT
+    });
+
     builder
-        .define("MDB_IDL_LOGN", Some(MDB_IDL_LOGN.to_string().as_str()))
+        .define("MDB_IDL_LOGN", Some(mdb_idl_logn.to_string().as_str()))
         .file(lmdb.join("mdb.c"))
         .file(lmdb.join("midl.c"))
         // https://github.com/mozilla/lmdb/blob/b7df2cac50fb41e8bd16aab4cc5fd167be9e032a/libraries/liblmdb/Makefile#L23
