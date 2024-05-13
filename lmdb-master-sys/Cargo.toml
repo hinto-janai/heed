@@ -29,6 +29,7 @@ libc = "0.2.139"
 [build-dependencies]
 bindgen = { version = "0.69.1", default-features = false, optional = true, features = ["runtime"] }
 cc = "1.0.78"
+cfg-if = "1.0.0"
 doxygen-rs = "0.4.2"
 
 [dev-dependencies]
@@ -46,8 +47,8 @@ posix-sem = []
 # allocated when opening an LMDB environment in read-write mode).
 #
 # Each feature defines MDB_IDL_LOGN as the value in the name of the feature.
-# That means these features are mutually exclusive, and you must not specify
-# more than one at the same time (or the crate will fail to compile).
+# If more than 1 feature is enabled, the feature with the highest value will be chosen.
+# If none of the features are enabled, `mdb_idl_logn_16` is used as the default.
 #
 # For more information on the motivation for these features (and their effect),
 # see https://github.com/mozilla/lmdb/pull/2.
